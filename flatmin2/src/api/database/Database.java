@@ -140,7 +140,6 @@ public class Database
 		}
 
 		return shoppingItem;
-
 	}
 
 	public static void deleteShoppingItem(long id) throws SQLException
@@ -242,23 +241,95 @@ public class Database
 
 	public static Users insertUser(Users user) throws SQLException
 	{
+		Connection conn = null;
+		PreparedStatement ps = null;
+
 		try
 		{
-			// Connection conn = DataSource.getConnection();
+			conn = DataSource.getConnection();
+			String query = "INSERT INTO users (first, last, email, username, password) VALUES (?, ?, ?, ?, ?)";
+			ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, user.getFirst());
+			ps.setString(2, user.getLast());
+			ps.setString(3, user.getEmail());
+			ps.setString(4, user.getUsername());
+			ps.setString(5, user.getPassword());
+
+			int row = ps.executeUpdate();
+
+			if (row == 0)
+				throw new SQLException("Unable to insert user");
+
+			try (ResultSet generatedKeys = ps.getGeneratedKeys())
+			{
+				if (generatedKeys.next())
+					user.setIdusers(generatedKeys.getLong(1));
+				else
+					throw new SQLException("Unable to insert user, no ID obtained.");
+			}
 
 		} catch (Exception e)
 		{
-
+			System.out.println("Couldn't insert user");
+		} finally
+		{
+			if (conn != null)
+				conn.close();
 		}
+
 		return user;
 	}
 
-	public static void deleteUser(long id)
+	public static Users updateUser(Users user) throws SQLException
 	{
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		try
+		{
+			conn = DataSource.getConnection();
+			String query = "UPDATE users SET first = ?, last = ?, email = ?, username = ?, password = ? WHERE idusers = ?";
+			ps = conn.prepareStatement(query);
+			ps.setString(1, user.getFirst());
+			ps.setString(2, user.getLast());
+			ps.setString(3, user.getEmail());
+			ps.setString(4, user.getUsername());
+			ps.setString(5, user.getPassword());
+			ps.setLong(6, user.getIdusers());
+			ps.executeUpdate();
+
+		} catch (Exception e)
+		{
+			System.out.println("Couldn't update user");
+		} finally
+		{
+			if (conn != null)
+				conn.close();
+		}
+
+		return user;
 	}
 
-	public static Users updateUser(Users user)
+	public static void deleteUser(long id) throws SQLException
 	{
-		return null;
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		try
+		{
+			conn = DataSource.getConnection();
+			String query = "DELETE FROM users WHERE idusers = ?";
+			ps = conn.prepareStatement(query);
+			ps.setLong(1, id);
+			ps.executeUpdate();
+
+		} catch (Exception e)
+		{
+			System.out.println("Couldn't delete user");
+		} finally
+		{
+			if (conn != null)
+				conn.close();
+		}
 	}
 }

@@ -12,6 +12,8 @@
 	<ul>
 		<li><a href="app/shoppinglist">Shoppinglist</a></li>
 		<li><a href="app/users">Users</a></li>
+		<li><a href="app/expenses">Expenses</a></li>
+		<li><a href="app/income">Income</a></li>
 	</ul>
 
 </body>

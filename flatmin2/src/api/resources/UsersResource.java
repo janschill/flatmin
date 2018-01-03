@@ -59,5 +59,4 @@ public class UsersResource
 	{
 		usersService.deleteUser(id);
 	}
-
 }

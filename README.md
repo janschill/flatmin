@@ -27,3 +27,20 @@ If you encounter this error message with your Java Rest Client:
 > java.lang.NoClassDefFoundError: org/glassfish/json/jaxrs/JsonStructureBodyReader
 
 you have to add these two libraries `javax.json.jar` and `jsonp-jaxrs.jar`, both located in your `glassfish4/glassfish/modules`-path,  to you `Build Path`.
+
+## Database
+
+## Resources
+
+## Header
+
+## Authentication
+
+Traditional session-based authentication works as the client sends his login information to the server.
+The server accepts or rejects the data and creates a session and send the session token to the client.
+The client stores this token in a cookie and sends with every request this session token, which then gets validated by the server.
+This mechanism causes a problem, because RESTful services are stateless, which means the server does not hold any information about the client that are maintained over multiple responses/requests.
+This is the reason, we cannot use session based authentication in our RESTful API.
+
+Basic auth
+Send encoded login in every request header. Only secure when used with HTTPS.

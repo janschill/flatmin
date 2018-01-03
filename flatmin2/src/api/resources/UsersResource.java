@@ -17,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import api.model.Einnahme;
+import api.model.ShoppingItem;
 import api.model.Users;
 import api.service.UsersService;
 
@@ -30,17 +32,23 @@ public class UsersResource
 	UsersService usersService = new UsersService();
 
 	@GET
-	public List<Users> getUsers() throws SQLException
+	public List<Users> getUsers(@Context UriInfo uriInfo) throws SQLException
 	{
-		return usersService.getUsers();
+		List<Users> list = usersService.getUsers();
+		for (Users user : list)
+		{
+			user.addLink(getUriForSelf(uriInfo, user), "self");
+		}
+		return list;
 	}
 
 	@GET
 	@Path("/{id}")
-	public Users getUser(@PathParam("id") long id) throws SQLException
+	public Users getUser(@PathParam("id") long id, @Context UriInfo uriInfo) throws SQLException
 	{
-		System.out.println(TAG + id);
-		return usersService.getUser(id);
+		Users user = usersService.getUser(id);
+		user.addLink(getUriForSelf(uriInfo, user), "self");
+		return user;
 	}
 
 	@POST
@@ -65,5 +73,12 @@ public class UsersResource
 	public void deleteUser(@PathParam("id") long id) throws SQLException
 	{
 		usersService.deleteUser(id);
+	}
+
+	private String getUriForSelf(UriInfo uriInfo, Users user)
+	{
+		String uri = uriInfo.getBaseUriBuilder().path(UsersResource.class).path(Long.toString(user.getIdusers()))
+				.build().toString();
+		return uri;
 	}
 }

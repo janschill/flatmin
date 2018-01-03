@@ -31,9 +31,17 @@ public class AusgabeResource
 	AusgabeService ausgabeService = new AusgabeService();
 
 	@GET
-	public List<Ausgabe> getAusgaben() throws SQLException
+	public List<Ausgabe> getAusgaben(@Context UriInfo uriInfo) throws SQLException
 	{
-		return ausgabeService.getAusgaben();
+		List<Ausgabe> list = ausgabeService.getAusgaben();
+
+		for (Ausgabe ausgabe : list)
+		{
+			ausgabe.addLink(getUriForSelf(uriInfo, ausgabe), "self");
+			ausgabe.addLink(getUriForUser(uriInfo, ausgabe), "user");
+		}
+
+		return list;
 	}
 
 	@GET
@@ -66,5 +74,19 @@ public class AusgabeResource
 	public void deleteAusgabe(@PathParam("id") long id) throws SQLException
 	{
 		ausgabeService.deleteAusgabe(id);
+	}
+
+	private String getUriForSelf(UriInfo uriInfo, Ausgabe ausgabe)
+	{
+		String uri = uriInfo.getBaseUriBuilder().path(AusgabeResource.class).path(Long.toString(ausgabe.getId()))
+				.build().toString();
+		return uri;
+	}
+
+	private String getUriForUser(UriInfo uriInfo, Ausgabe ausgabe)
+	{
+		String uri = uriInfo.getBaseUriBuilder().path(UsersResource.class).path(Long.toString(ausgabe.getIdusers()))
+				.build().toString();
+		return uri;
 	}
 }

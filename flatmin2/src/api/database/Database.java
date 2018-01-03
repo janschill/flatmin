@@ -18,6 +18,11 @@ public class Database
 {
 	private final static String TAG = "Database: ";
 
+	public static boolean checkLogin(String username, String password)
+	{
+		return true;
+	}
+
 	public static ShoppingItem getShoppingItem(long id) throws SQLException
 	{
 		ShoppingItem shoppingItem = new ShoppingItem();

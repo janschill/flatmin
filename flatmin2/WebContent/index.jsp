@@ -15,6 +15,12 @@
 		<li><a href="app/expenses">Expenses</a></li>
 		<li><a href="app/income">Income</a></li>
 	</ul>
+	
+    <form action="/flatmin2/app/authenticate" method="post">
+        <input type="text" name="username" placeholder="Username"> 
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit">Login</button>
+    </form>
 
 </body>
 </html>

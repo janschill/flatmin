@@ -30,17 +30,27 @@ public class EinnahmeResource
 	EinnahmeService einnahmeService = new EinnahmeService();
 
 	@GET
-	public List<Einnahme> getEinnahmen() throws SQLException
+	public List<Einnahme> getEinnahmen(@Context UriInfo uriInfo) throws SQLException
 	{
-		return einnahmeService.getEinnahmen();
+		List<Einnahme> list = einnahmeService.getEinnahmen();
+
+		for (Einnahme einnahme : list)
+		{
+			einnahme.addLink(getUriForSelf(uriInfo, einnahme), "self");
+			einnahme.addLink(getUriForUser(uriInfo, einnahme), "user");
+		}
+
+		return list;
 	}
 
 	@GET
 	@Path("/{id}")
-	public Einnahme getEinnahme(@PathParam("id") long id) throws SQLException
+	public Einnahme getEinnahme(@PathParam("id") long id, @Context UriInfo uriInfo) throws SQLException
 	{
-		System.out.println(TAG + id);
-		return einnahmeService.getEinnahme(id);
+		Einnahme einnahme = einnahmeService.getEinnahme(id);
+		einnahme.addLink(getUriForSelf(uriInfo, einnahme), "self");
+		einnahme.addLink(getUriForUser(uriInfo, einnahme), "user");
+		return einnahme;
 	}
 
 	@POST
@@ -49,6 +59,7 @@ public class EinnahmeResource
 		Einnahme newEinnahme = einnahmeService.insertEinnahme(einnahme);
 		String id = String.valueOf(newEinnahme.getId());
 		URI uri = uriInfo.getAbsolutePathBuilder().path(id).build();
+
 		return Response.created(uri).entity(newEinnahme).build();
 	}
 
@@ -65,5 +76,19 @@ public class EinnahmeResource
 	public void deleteEinnahme(@PathParam("id") long id) throws SQLException
 	{
 		einnahmeService.deleteEinnahme(id);
+	}
+
+	private String getUriForSelf(UriInfo uriInfo, Einnahme einnahme)
+	{
+		String uri = uriInfo.getBaseUriBuilder().path(EinnahmeResource.class).path(Long.toString(einnahme.getId()))
+				.build().toString();
+		return uri;
+	}
+
+	private String getUriForUser(UriInfo uriInfo, Einnahme einnahme)
+	{
+		String uri = uriInfo.getBaseUriBuilder().path(UsersResource.class).path(Long.toString(einnahme.getIdusers()))
+				.build().toString();
+		return uri;
 	}
 }

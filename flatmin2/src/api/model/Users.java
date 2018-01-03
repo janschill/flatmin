@@ -1,5 +1,8 @@
 package api.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -11,6 +14,7 @@ public class Users
 	private String email;
 	private String username;
 	private String password;
+	private List<Link> links = new ArrayList<Link>();
 
 	public Users()
 	{
@@ -84,5 +88,23 @@ public class Users
 	public void setPassword(String password)
 	{
 		this.password = password;
+	}
+
+	public List<Link> getLinks()
+	{
+		return links;
+	}
+
+	public void setLinks(List<Link> links)
+	{
+		this.links = links;
+	}
+
+	public void addLink(String url, String rel)
+	{
+		Link link = new Link();
+		link.setLink(url);
+		link.setRel(rel);
+		links.add(link);
 	}
 }

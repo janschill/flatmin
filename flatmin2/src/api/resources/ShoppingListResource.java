@@ -17,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import api.model.Ausgabe;
+import api.model.Einnahme;
 import api.model.ShoppingItem;
 import api.service.ShoppingListService;
 
@@ -28,16 +30,25 @@ public class ShoppingListResource
 	ShoppingListService shoppingListService = new ShoppingListService();
 
 	@GET
-	public List<ShoppingItem> getShoppingList() throws SQLException
+	public List<ShoppingItem> getShoppingList(@Context UriInfo uriInfo) throws SQLException
 	{
-		return shoppingListService.getShoppingList();
+		List<ShoppingItem> list = shoppingListService.getShoppingList();
+
+		for (ShoppingItem shoppingItem : list)
+		{
+			shoppingItem.addLink(getUriForSelf(uriInfo, shoppingItem), "self");
+		}
+
+		return list;
 	}
 
 	@GET
 	@Path("/{id}")
-	public ShoppingItem getShoppingItem(@PathParam("id") long id) throws SQLException
+	public ShoppingItem getShoppingItem(@PathParam("id") long id, @Context UriInfo uriInfo) throws SQLException
 	{
-		return shoppingListService.getShoppingItem(id);
+		ShoppingItem shoppingItem = shoppingListService.getShoppingItem(id);
+		shoppingItem.addLink(getUriForSelf(uriInfo, shoppingItem), "self");
+		return shoppingItem;
 	}
 
 	@POST
@@ -62,6 +73,13 @@ public class ShoppingListResource
 	public void deleteShoppingItem(@PathParam("id") long id) throws SQLException
 	{
 		shoppingListService.deleteShoppingItem(id);
+	}
+
+	private String getUriForSelf(UriInfo uriInfo, ShoppingItem shoppingItem)
+	{
+		String uri = uriInfo.getBaseUriBuilder().path(ShoppingListResource.class)
+				.path(Long.toString(shoppingItem.getIdtodolist())).build().toString();
+		return uri;
 	}
 
 }

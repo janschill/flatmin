@@ -1,5 +1,6 @@
 package api.resources;
 
+import java.net.URI;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -11,7 +12,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import api.model.Einnahme;
 import api.service.EinnahmeService;
@@ -40,9 +44,12 @@ public class EinnahmeResource
 	}
 
 	@POST
-	public Einnahme insertEinnahme(Einnahme einnahme) throws SQLException
+	public Response insertEinnahme(Einnahme einnahme, @Context UriInfo uriInfo) throws SQLException
 	{
-		return einnahmeService.insertEinnahme(einnahme);
+		Einnahme newEinnahme = einnahmeService.insertEinnahme(einnahme);
+		String id = String.valueOf(newEinnahme.getId());
+		URI uri = uriInfo.getAbsolutePathBuilder().path(id).build();
+		return Response.created(uri).entity(newEinnahme).build();
 	}
 
 	@PUT

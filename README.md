@@ -43,4 +43,7 @@ This mechanism causes a problem, because RESTful services are stateless, which m
 This is the reason, we cannot use session based authentication in our RESTful API.
 
 Basic auth
-Send encoded login in every request header. Only secure when used with HTTPS.
+Sends encoded login in every request header. Only secure when used with HTTPS.
+
+We will be using token-based authentication, which generates a token with an expiration date on a valid login. The server stores this token in a database and sends the token back to the user.
+The user then, has to send the token in every request, where the server compares it to the stored token in the database. 

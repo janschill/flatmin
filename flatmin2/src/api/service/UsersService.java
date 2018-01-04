@@ -36,4 +36,9 @@ public class UsersService
 		Database.deleteUser(id);
 	}
 
+	public Users findUserByUsername(String username) throws SQLException
+	{
+		return Database.findUserByUsername(username);
+	}
+
 }

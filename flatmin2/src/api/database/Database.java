@@ -673,4 +673,41 @@ public class Database
 		}
 	}
 
+	public static Users findUserByUsername(String username) throws SQLException
+	{
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		Users user = new Users();
+
+		try
+		{
+			conn = DataSource.getConnection();
+			String query = "SELECT * FROM users WHERE username = ?";
+			ps = conn.prepareStatement(query);
+			ps.setString(1, username);
+			rs = ps.executeQuery();
+
+			while (rs.next())
+			{
+				user.setIdusers(rs.getLong("idusers"));
+				user.setFirst(rs.getString("first"));
+				user.setLast(rs.getString("last"));
+				user.setEmail(rs.getString("email"));
+				user.setUsername(rs.getString("username"));
+				user.setPassword(rs.getString("password"));
+			}
+
+		} catch (Exception e)
+		{
+			System.out.println("Couldn't get user");
+		} finally
+		{
+			if (conn != null)
+				conn.close();
+		}
+
+		return user;
+	}
+
 }

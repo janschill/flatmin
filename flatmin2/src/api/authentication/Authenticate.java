@@ -10,18 +10,21 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import api.model.AuthenticationToken;
 import api.model.UserCredentials;
 import api.model.Users;
 import api.service.AuthenticationTokenService;
 import api.service.UsernamePasswordValidator;
+import api.service.UsersService;
 
 @Path("/authenticate")
 public class Authenticate
 {
 	private UsernamePasswordValidator usernamePasswordValidator = new UsernamePasswordValidator();
 	private AuthenticationTokenService authenticationTokenService = new AuthenticationTokenService();
+	private UsersService usersService = new UsersService();
 
 	/** the token generation is not taking in any user params, yet
 	 * 
@@ -43,9 +46,17 @@ public class Authenticate
 
 		Users user = usernamePasswordValidator.validateCredentials(userCredentials.getUsername(),
 				userCredentials.getPassword());
-		String token = authenticationTokenService.issueToken();
-		AuthenticationToken authenticationToken = new AuthenticationToken();
-		authenticationToken.setToken(token);
-		return Response.ok(authenticationToken).build();
+		if (user != null)
+		{
+			String token = authenticationTokenService.issueToken();
+			AuthenticationToken authenticationToken = new AuthenticationToken();
+			authenticationToken.setToken(token);
+			usersService.setTokenToUser(user, authenticationToken);
+			return Response.ok(authenticationToken).build();
+		} else
+		{
+			return Response.status(Status.UNAUTHORIZED).build();
+		}
+
 	}
 }

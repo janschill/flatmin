@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import api.model.Ausgabe;
+import api.model.AuthenticationToken;
 import api.model.Einnahme;
 import api.model.ShoppingItem;
 import api.model.Users;
@@ -708,6 +709,65 @@ public class Database
 		}
 
 		return user;
+	}
+
+	public static boolean isTokenSet(Users user) throws SQLException
+	{
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try
+		{
+			conn = DataSource.getConnection();
+			ps = conn.prepareStatement("SELECT * FROM token WHERE iduser = ?");
+			ps.setLong(1, user.getIdusers());
+			rs = ps.executeQuery();
+
+			return rs.next();
+
+		} catch (Exception e)
+		{
+			System.out.println("Couldn't get user");
+		} finally
+		{
+			if (conn != null)
+				conn.close();
+		}
+		return false;
+	}
+
+	public static void setTokenToUser(Users user, AuthenticationToken token) throws SQLException
+	{
+		Connection conn = null;
+		PreparedStatement ps = null;
+
+		try
+		{
+			conn = DataSource.getConnection();
+
+			if (isTokenSet(user))
+			{
+				ps = conn.prepareStatement("UPDATE token SET token = ?, datum = now() WHERE iduser = ?");
+				ps.setString(1, token.getToken());
+				ps.setLong(2, user.getIdusers());
+			} else
+			{
+				ps = conn.prepareStatement("INSERT INTO token (iduser, token, datum) VALUES (?, ?, now())");
+				ps.setLong(1, user.getIdusers());
+				ps.setString(2, token.getToken());
+			}
+
+			ps.executeUpdate();
+
+		} catch (Exception e)
+		{
+			System.out.println("Couldn't insert or update token");
+		} finally
+		{
+			if (conn != null)
+				conn.close();
+		}
 	}
 
 }

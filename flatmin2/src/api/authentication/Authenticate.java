@@ -40,6 +40,7 @@ public class Authenticate
 	public Response authenticateLogin(@FormParam("username") String username, @FormParam("password") String password)
 			throws URISyntaxException, SQLException
 	{
+//		@FormParam("username") String username, @FormParam("password") String password
 		UserCredentials userCredentials = new UserCredentials();
 		userCredentials.setUsername(username);
 		userCredentials.setPassword(password);

@@ -19,7 +19,6 @@ public class RestAuthClient
 		String password = "50cent";
 		String login = username + ":" + password;
 
-		
 	}
 
 }

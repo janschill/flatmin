@@ -18,13 +18,8 @@ public class RestAuthClient
 		String username = "janschill";
 		String password = "50cent";
 		String login = username + ":" + password;
-		String encoded64 = new BASE64Encoder().encode(login.getBytes());
 
 		
-		
-		Response response = Response.ok().header("Authorization", "Basic " + encoded64).build();
-
-		System.out.println(response);
 	}
 
 }

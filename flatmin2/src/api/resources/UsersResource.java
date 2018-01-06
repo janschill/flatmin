@@ -52,7 +52,7 @@ public class UsersResource
 	}
 
 	@POST
-	public Response insertUser(Users user, @Context UriInfo uriInfo) throws SQLException
+	public Response insertUser(Users user, @Context UriInfo uriInfo) throws Exception
 	{
 		Users newUser = usersService.insertUser(user);
 		String id = String.valueOf(newUser.getIdusers());

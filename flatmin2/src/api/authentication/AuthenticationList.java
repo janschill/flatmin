@@ -10,9 +10,21 @@ public class AuthenticationList
 	public AuthenticationList()
 	{
 		list.add(new SecuredContext("GET", "users"));
+
 		list.add(new SecuredContext("POST", "income"));
 		list.add(new SecuredContext("POST", "expenses"));
 		list.add(new SecuredContext("POST", "shoppinglist"));
+
+		list.add(new SecuredContext("DELETE", "users"));
+		list.add(new SecuredContext("DELETE", "shoppinglist"));
+		list.add(new SecuredContext("DELETE", "income"));
+		list.add(new SecuredContext("DELETE", "expenses"));
+
+		list.add(new SecuredContext("UPDATE", "users"));
+		list.add(new SecuredContext("UPDATE", "shoppinglist"));
+		list.add(new SecuredContext("UPDATE", "income"));
+		list.add(new SecuredContext("UPDATE", "expenses"));
+
 	}
 
 	public List<SecuredContext> getAuthenticationList()

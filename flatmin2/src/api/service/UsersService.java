@@ -22,7 +22,7 @@ public class UsersService
 		return Database.getUser(id);
 	}
 
-	public Users insertUser(Users user) throws SQLException
+	public Users insertUser(Users user) throws Exception
 	{
 		return Database.insertUser(user);
 	}

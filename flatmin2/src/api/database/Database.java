@@ -247,45 +247,79 @@ public class Database
 		return list;
 	}
 
-	public static Users insertUser(Users user) throws SQLException
+	public static Users insertUser(Users user) throws Exception
 	{
 		Connection conn = null;
 		PreparedStatement ps = null;
 
+		if (userExists(user.getUsername()))
+		{
+			try
+			{
+				conn = DataSource.getConnection();
+				String query = "INSERT INTO users (first, last, email, username, password) VALUES (?, ?, ?, ?, ?)";
+				ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, user.getFirst());
+				ps.setString(2, user.getLast());
+				ps.setString(3, user.getEmail());
+				ps.setString(4, user.getUsername());
+				ps.setString(5, user.getPassword());
+
+				int row = ps.executeUpdate();
+
+				if (row == 0)
+					throw new SQLException("Unable to insert user");
+
+				try (ResultSet generatedKeys = ps.getGeneratedKeys())
+				{
+					if (generatedKeys.next())
+						user.setIdusers(generatedKeys.getLong(1));
+					else
+						throw new SQLException("Unable to insert user, no ID obtained.");
+				}
+
+			} catch (Exception e)
+			{
+				System.out.println("Couldn't insert user");
+			} finally
+			{
+				if (conn != null)
+					conn.close();
+			}
+		} else
+		{
+			throw new Exception("Couldn't insert user");
+		}
+
+		return user;
+	}
+
+	public static boolean userExists(String username) throws SQLException
+	{
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
 		try
 		{
 			conn = DataSource.getConnection();
-			String query = "INSERT INTO users (first, last, email, username, password) VALUES (?, ?, ?, ?, ?)";
+			String query = "SELECT * FROM users WHERE username = ?";
 			ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, user.getFirst());
-			ps.setString(2, user.getLast());
-			ps.setString(3, user.getEmail());
-			ps.setString(4, user.getUsername());
-			ps.setString(5, user.getPassword());
+			ps.setString(1, username);
+			rs = ps.executeQuery();
 
-			int row = ps.executeUpdate();
-
-			if (row == 0)
-				throw new SQLException("Unable to insert user");
-
-			try (ResultSet generatedKeys = ps.getGeneratedKeys())
-			{
-				if (generatedKeys.next())
-					user.setIdusers(generatedKeys.getLong(1));
-				else
-					throw new SQLException("Unable to insert user, no ID obtained.");
-			}
+			return rs.next();
 
 		} catch (Exception e)
 		{
-			System.out.println("Couldn't insert user");
+			System.out.println("Couldn't get user");
 		} finally
 		{
 			if (conn != null)
 				conn.close();
 		}
 
-		return user;
+		return false;
 	}
 
 	public static Users updateUser(Users user) throws SQLException

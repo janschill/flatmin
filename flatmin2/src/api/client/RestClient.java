@@ -39,9 +39,6 @@ public class RestClient
 				.get(Einnahme.class);
 		System.out.println(einnahme.getBetrag());
 
-		Users user1 = singleUserTarget.resolveTemplate("id", "5").request(MediaType.APPLICATION_JSON).get(Users.class);
-		System.out.println(user1.getUsername());
-
 		Ausgabe ausgabe = singleExpenseTarget.resolveTemplate("id", "41").request(MediaType.APPLICATION_JSON)
 				.get(Ausgabe.class);
 		System.out.println(ausgabe.getBetrag());
@@ -50,7 +47,11 @@ public class RestClient
 				.request(MediaType.APPLICATION_JSON).get(ShoppingItem.class);
 		System.out.println(shoppingItem.getItem());
 
-		System.out.println(login("janschill", "50cent", authenticationTarget));
+		AuthenticationToken token = login("janschill", "50cent", authenticationTarget);
+
+		Users user1 = singleUserTarget.resolveTemplate("id", "5").request(MediaType.APPLICATION_JSON)
+				.header("token", token.getToken()).get(Users.class);
+		System.out.println(user1.getUsername());
 
 		// createNewUser("Marius", "Surf", "marius@surf.de", "marius", "surf",
 		// usersTarget);

@@ -28,9 +28,16 @@ If you encounter this error message with your Java Rest Client:
 
 you have to add these two libraries `javax.json.jar` and `jsonp-jaxrs.jar`, both located in your `glassfish4/glassfish/modules`-path,  to you `Build Path`.
 
+## Application server
+Wee will be using glassfish4.
+
 ## Database
+Our database of choice is Postgres
+
 
 ## Resources
+RESTful services use resources as
+
 
 ## Header
 
@@ -46,4 +53,4 @@ Basic auth
 Sends encoded login in every request header. Only secure when used with HTTPS.
 
 We will be using token-based authentication, which generates a token with an expiration date on a valid login. The server stores this token in a database and sends the token back to the user.
-The user then, has to send the token in every request, where the server compares it to the stored token in the database. 
+The user then, has to send the token in every request, where the server compares it to the stored token in the database.

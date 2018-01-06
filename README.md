@@ -2,6 +2,12 @@
 
 ## Setup
 
+### Application server
+Wee will be using GlassFish.
+
+### Database
+Our database of choice is PostgreSQL
+
 ### web.xml
 Here we configure our Web API URL-Pattern `<servlet-mapping>` and tell the application where to look for the Java classes to handle requests `<init-param>`.
 ```
@@ -21,18 +27,16 @@ Here we configure our Web API URL-Pattern `<servlet-mapping>` and tell the appli
 ```
 We can then structure our Java Resources in the `api` package and use the `@Path` - Annotation for classes and/or methods to handle the requests.
 
-## Rest Client
+## REST Client
+
+
+### Errors
 If you encounter this error message with your Java Rest Client:
 
 > java.lang.NoClassDefFoundError: org/glassfish/json/jaxrs/JsonStructureBodyReader
 
 you have to add these two libraries `javax.json.jar` and `jsonp-jaxrs.jar`, both located in your `glassfish4/glassfish/modules`-path,  to you `Build Path`.
 
-## Application server
-Wee will be using GlassFish.
-
-## Database
-Our database of choice is PostgreSQL
 
 
 ## Resources

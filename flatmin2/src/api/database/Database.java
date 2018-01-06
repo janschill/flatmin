@@ -770,4 +770,31 @@ public class Database
 		}
 	}
 
+	public static boolean validateToken(AuthenticationToken token) throws SQLException
+	{
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try
+		{
+			conn = DataSource.getConnection();
+			System.out.println(token.getToken());
+			ps = conn.prepareStatement("SELECT * FROM token WHERE token = ?");
+			ps.setString(1, token.getToken());
+			rs = ps.executeQuery();
+
+			return rs.next();
+
+		} catch (Exception e)
+		{
+			System.out.println("Couldn't get token");
+		} finally
+		{
+			if (conn != null)
+				conn.close();
+		}
+		return false;
+	}
+
 }

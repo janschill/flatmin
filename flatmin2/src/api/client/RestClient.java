@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 import org.mindrot.jbcrypt.BCrypt;
 
 import api.model.Ausgabe;
+import api.model.AuthenticationToken;
 import api.model.Einnahme;
 import api.model.ShoppingItem;
 import api.model.UserCredentials;
@@ -33,7 +34,6 @@ public class RestClient
 		WebTarget shoppingListTarget = baseTarget.path("shoppinglist");
 		WebTarget singleShoppingListTarget = shoppingListTarget.path("{id}");
 		WebTarget authenticationTarget = baseTarget.path("authenticate");
-		WebTarget singleAuthenticationTarget = authenticationTarget.path("{id}");
 
 		Einnahme einnahme = singleIncomeTarget.resolveTemplate("id", "15").request(MediaType.APPLICATION_JSON)
 				.get(Einnahme.class);
@@ -46,11 +46,11 @@ public class RestClient
 				.get(Ausgabe.class);
 		System.out.println(ausgabe.getBetrag());
 
-		ShoppingItem shoppingItem = singleShoppingListTarget.resolveTemplate("id", "12")
+		ShoppingItem shoppingItem = singleShoppingListTarget.resolveTemplate("id", "30")
 				.request(MediaType.APPLICATION_JSON).get(ShoppingItem.class);
 		System.out.println(shoppingItem.getItem());
 
-		System.out.println(login("janschill", "50cent", singleAuthenticationTarget));
+		System.out.println(login("janschill", "50cent", authenticationTarget));
 
 		// createNewUser("Marius", "Surf", "marius@surf.de", "marius", "surf",
 		// usersTarget);
@@ -58,16 +58,22 @@ public class RestClient
 	}
 
 	@SuppressWarnings("unused")
-	private static String login(String username, String password, WebTarget authenticationTarget)
+	private static AuthenticationToken login(String username, String password, WebTarget authenticationTarget)
 	{
 		UserCredentials userCredentials = new UserCredentials();
 		userCredentials.setUsername(username);
 		userCredentials.setPassword(password);
 		Response postResponse = authenticationTarget.request().post(Entity.json(userCredentials));
-		System.out.println(postResponse.getHeaderString("token"));
-		if (postResponse.getStatus() != 201)
-			return "Not able to login";
-		return "Succesfully loggedin";
+		AuthenticationToken token = postResponse.readEntity(AuthenticationToken.class);
+		System.out.println("Entity: " + token.getToken());
+		System.out.println(postResponse.getHeaders());
+		System.out.println(postResponse.getStatus());
+
+		if (postResponse.getStatus() != 200)
+			System.out.println("Not able to login");
+		System.out.println("Succesfully logged in");
+
+		return token;
 	}
 
 	@SuppressWarnings("unused")

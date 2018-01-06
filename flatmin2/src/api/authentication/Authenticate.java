@@ -35,15 +35,16 @@ public class Authenticate
 	 * @throws SQLException
 	 */
 	@POST
-	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	// @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response authenticateLogin(@FormParam("username") String username, @FormParam("password") String password)
-			throws URISyntaxException, SQLException
+	public Response authenticateLogin(UserCredentials userCredentials) throws URISyntaxException, SQLException
 	{
-//		@FormParam("username") String username, @FormParam("password") String password
-		UserCredentials userCredentials = new UserCredentials();
-		userCredentials.setUsername(username);
-		userCredentials.setPassword(password);
+		// @FormParam("username") String username, @FormParam("password") String
+		// password
+		// UserCredentials userCredentials = new UserCredentials();
+		// userCredentials.setUsername(username);
+		// userCredentials.setPassword(password);
 
 		Users user = usernamePasswordValidator.validateCredentials(userCredentials.getUsername(),
 				userCredentials.getPassword());

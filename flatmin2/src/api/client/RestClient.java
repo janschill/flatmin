@@ -47,6 +47,7 @@ public class RestClient
 				.request(MediaType.APPLICATION_JSON).get(ShoppingItem.class);
 		System.out.println(shoppingItem.getItem());
 
+
 		AuthenticationToken token = login("janschill", "50cent", authenticationTarget);
 
 		Users user1 = singleUserTarget.resolveTemplate("id", "5").request(MediaType.APPLICATION_JSON)
@@ -66,8 +67,6 @@ public class RestClient
 		userCredentials.setPassword(password);
 		Response postResponse = authenticationTarget.request().post(Entity.json(userCredentials));
 		AuthenticationToken token = postResponse.readEntity(AuthenticationToken.class);
-		System.out.println("Entity: " + token.getToken());
-		System.out.println(postResponse.getHeaders());
 		System.out.println(postResponse.getStatus());
 
 		if (postResponse.getStatus() != 200)

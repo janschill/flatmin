@@ -29,10 +29,10 @@ If you encounter this error message with your Java Rest Client:
 you have to add these two libraries `javax.json.jar` and `jsonp-jaxrs.jar`, both located in your `glassfish4/glassfish/modules`-path,  to you `Build Path`.
 
 ## Application server
-Wee will be using glassfish4.
+Wee will be using GlassFish.
 
 ## Database
-Our database of choice is Postgres
+Our database of choice is PostgreSQL
 
 
 ## Resources

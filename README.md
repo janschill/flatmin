@@ -3,7 +3,7 @@
 ## Setup
 
 ### Application server
-Wee will be using GlassFish.
+We will be using GlassFish.
 
 ### Database
 Our database of choice is PostgreSQL
@@ -37,6 +37,11 @@ If you encounter this error message with your Java Rest Client:
 
 you have to add these two libraries `javax.json.jar` and `jsonp-jaxrs.jar`, both located in your `glassfish4/glassfish/modules`-path,  to you `Build Path`.
 
+Another error that might occur when running the Java Rest Client:
+
+> Exception in thread "main" org.glassfish.jersey.message.internal.MessageBodyProviderNotFoundException: MessageBodyReader not found for media type=text/html, type=class api.model.AuthenticationToken, genericType=class api.model.AuthenticationToken.
+
+The reason for this might be an old database without Tokens. Try restoring a new backup.
 
 
 ## Resources

@@ -17,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import api.model.Einnahme;
 import api.model.ShoppingItem;
 import api.model.Users;
@@ -54,6 +56,7 @@ public class UsersResource
 	@POST
 	public Response insertUser(Users user, @Context UriInfo uriInfo) throws Exception
 	{
+		user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
 		Users newUser = usersService.insertUser(user);
 		String id = String.valueOf(newUser.getIdusers());
 		URI uri = uriInfo.getAbsolutePathBuilder().path(id).build();

@@ -26,6 +26,15 @@ import java.net.URL;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
+    private static final int REQUEST_SIGNUP = 0;
+    public static String token = null;
+    private String url = "";
+
+    JSONObject jsonObject = new JSONObject();
+    Button _loginButton;
+    EditText _passwordText;
+    TextView _signupLink;
+    EditText _usernameText;
 
 
 
@@ -34,6 +43,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+        String baseURL = ((Globals) this.getApplication()).getBASE_URL();
+        String authenticateURL = ((Globals) this.getApplication()).getAUTHENTICATE_URL();
+        url = baseURL + authenticateURL;
 
     }
 

@@ -19,8 +19,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.mindrot.jbcrypt.BCrypt;
 
-import api.model.Einnahme;
-import api.model.ShoppingItem;
 import api.model.Users;
 import api.service.UsersService;
 
@@ -29,7 +27,6 @@ import api.service.UsersService;
 @Produces(MediaType.APPLICATION_JSON)
 public class UsersResource
 {
-	private final static String TAG = "UsersResource: ";
 
 	UsersService usersService = new UsersService();
 

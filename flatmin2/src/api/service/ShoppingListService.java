@@ -8,7 +8,6 @@ import api.model.ShoppingItem;
 
 public class ShoppingListService
 {
-	private final static String TAG = "ShoppingListService: ";
 	
 	public ShoppingItem getShoppingItem(long id) throws SQLException
 	{

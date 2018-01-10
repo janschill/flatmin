@@ -6,8 +6,8 @@ import java.sql.DriverManager;
 public class DataSource
 {
 	private static final String TAG = "DataSource:";
-	private static final String ADDRESS = "jdbc:postgresql://localhost:5432/Flatmin";
-	private static final String USER = "postgres";
+	private static final String ADDRESS = "jdbc:postgresql://192.168.178.81:5432/flatmin";
+	private static final String USER = "pi";
 	private static final String PASSWORD = "quarcks";
 	private static final String DBDRIVER = "org.postgresql.Driver";
 	private static Connection conn = null;

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.restful.jssr.jerseyclient.ExpensesActivity">
+
+    <TextView
+        android:id="@+id/textExpenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="25dip"
+        android:paddingRight="25dip"
+        android:paddingTop="25dip"
+        android:text="Expenses"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15pt" />
+
+
+    <ListView
+        android:id="@+id/eListView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textExpenses"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:paddingLeft="25dip"
+        android:paddingTop="25dip"></ListView>
+
+</RelativeLayout>

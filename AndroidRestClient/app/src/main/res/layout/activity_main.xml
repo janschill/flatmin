@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.restful.jssr.jerseyclient.MainActivity">
+
+
+        <Button
+            android:id="@+id/buttonIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="callIncome"
+            android:text="Income"/>
+        <Button
+            android:id="@+id/buttonExpenses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="callExpenses"
+            android:text="Expenses"
+            android:layout_below="@+id/buttonIncome"/>
+        <Button
+            android:id="@+id/buttonUsers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="callUsers"
+            android:text="Users"
+            android:layout_below="@+id/buttonExpenses"/>
+        <Button
+            android:id="@+id/buttonShoppingList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="callShoppingList"
+            android:text="ShoppingList"
+            android:layout_below="@+id/buttonUsers"/>
+
+
+
+</RelativeLayout>

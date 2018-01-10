@@ -5,6 +5,7 @@ import java.util.List;
 
 import api.database.Database;
 import api.model.Ausgabe;
+import api.model.EinnahmeAusgabe;
 
 public class AusgabeService
 {
@@ -21,9 +22,9 @@ public class AusgabeService
 		return Database.getAusgabe(id);
 	}
 
-	public Ausgabe insertAusgabe(Ausgabe ausgabe) throws SQLException
+	public EinnahmeAusgabe insertEinnahmeAusgabe(EinnahmeAusgabe ausgabe) throws SQLException
 	{
-		return Database.insertAusgabe(ausgabe);
+		return Database.insertEinnahmeAusgabe(ausgabe);
 	}
 
 	public Ausgabe updateAusgabe(Ausgabe ausgabe) throws SQLException

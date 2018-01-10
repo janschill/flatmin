@@ -25,7 +25,6 @@ import api.service.EinnahmeService;
 @Produces(MediaType.APPLICATION_JSON)
 public class EinnahmeResource
 {
-	private final static String TAG = "EinnahmeResource: ";
 
 	EinnahmeService einnahmeService = new EinnahmeService();
 

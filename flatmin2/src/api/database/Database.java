@@ -12,7 +12,9 @@ import java.util.List;
 import api.model.Ausgabe;
 import api.model.AuthenticationToken;
 import api.model.Einnahme;
+import api.model.EinnahmeAusgabe;
 import api.model.ShoppingItem;
+import api.model.Username;
 import api.model.Users;
 
 public class Database
@@ -252,7 +254,7 @@ public class Database
 		Connection conn = null;
 		PreparedStatement ps = null;
 
-		if (userExists(user.getUsername()))
+		if (!userExists(user.getUsername()))
 		{
 			try
 			{
@@ -304,7 +306,7 @@ public class Database
 		{
 			conn = DataSource.getConnection();
 			String query = "SELECT * FROM users WHERE username = ?";
-			ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			ps = conn.prepareStatement(query);
 			ps.setString(1, username);
 			rs = ps.executeQuery();
 
@@ -652,6 +654,123 @@ public class Database
 		}
 
 		return ausgabe;
+	}
+
+	public static EinnahmeAusgabe insertEinnahmeAusgabe(EinnahmeAusgabe einnahmeAusgabe) throws SQLException
+	{
+		Connection conn = null;
+		PreparedStatement ps = null;
+		DecimalFormat numFormat = new DecimalFormat("#.00");
+		double betrag = einnahmeAusgabe.getBetrag();
+		einnahmeAusgabe.setBetrag(Double.valueOf(numFormat.format(betrag)));
+		double betragDivided = Double.valueOf(numFormat.format(betrag/einnahmeAusgabe.getDebtor().size()));
+		long user = getUserByToken(einnahmeAusgabe.getToken());
+
+		System.out.println(TAG + einnahmeAusgabe.getDebtor().size());
+
+		for (Username username : einnahmeAusgabe.getDebtor())
+		{
+			System.out.println(TAG + username);
+			Ausgabe newAusgabe = new Ausgabe();
+			newAusgabe.setBetrag(betragDivided);
+			newAusgabe.setNotiz(einnahmeAusgabe.getNotiz());
+			newAusgabe.setIdusers(getUserId(username.getUsername()));
+			insertAusgabe(newAusgabe);
+		}
+
+		try
+		{
+			conn = DataSource.getConnection();
+			String query = "INSERT INTO einnahmen (betrag, idusers, datum, notiz) VALUES (?, ?, now(), ?)";
+			ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+			ps.setDouble(1, einnahmeAusgabe.getBetrag());
+			ps.setLong(2, user);
+			ps.setString(3, einnahmeAusgabe.getNotiz());
+			int row = ps.executeUpdate();
+
+			if (row == 0)
+				throw new SQLException("Unable to insert ausgabe");
+
+			try (ResultSet generatedKeys = ps.getGeneratedKeys())
+			{
+				if (generatedKeys.next())
+					einnahmeAusgabe.setId(generatedKeys.getLong(1));
+				else
+					throw new SQLException("Unable to insert ausgabe, no ID obtained.");
+			}
+
+		} catch (Exception e)
+		{
+			System.out.println("Couldn't insert einnahmeAusgabe");
+		} finally
+		{
+			if (conn != null)
+				conn.close();
+		}
+
+		return einnahmeAusgabe;
+	}
+
+	private static long getUserId(String username) throws SQLException
+	{
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		long idUser = 0;
+
+		try
+		{
+			conn = DataSource.getConnection();
+			ps = conn.prepareStatement("SELECT idusers FROM users WHERE username = ?");
+			ps.setString(1, username);
+			rs = ps.executeQuery();
+
+			while (rs.next())
+			{
+				idUser = rs.getLong("idusers");
+			}
+
+		} catch (Exception e)
+		{
+			System.out.println("Couldn't get user from token.");
+		} finally
+		{
+			if (conn != null)
+				conn.close();
+		}
+
+		return idUser;
+	}
+
+	private static long getUserByToken(String token) throws SQLException
+	{
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		long idUser = 0;
+
+		try
+		{
+			conn = DataSource.getConnection();
+			ps = conn.prepareStatement("SELECT iduser FROM token WHERE token = ?");
+			ps.setString(1, token);
+			rs = ps.executeQuery();
+
+			while (rs.next())
+			{
+				idUser = rs.getLong("iduser");
+			}
+
+		} catch (Exception e)
+		{
+			System.out.println("Couldn't get user from token.");
+		} finally
+		{
+			if (conn != null)
+				conn.close();
+		}
+
+		return idUser;
 	}
 
 	public static Ausgabe updateAusgabe(Ausgabe ausgabe) throws SQLException

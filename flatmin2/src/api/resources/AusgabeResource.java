@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import api.model.Ausgabe;
-import api.model.Einnahme;
+import api.model.EinnahmeAusgabe;
 import api.service.AusgabeService;
 
 @Path("/expenses")
@@ -53,9 +53,12 @@ public class AusgabeResource
 	}
 
 	@POST
-	public Response insertAusgabe(Ausgabe ausgabe, @Context UriInfo uriInfo) throws SQLException
+	public Response insertAusgabe(EinnahmeAusgabe ausgabe, @Context UriInfo uriInfo) throws SQLException
 	{
-		Ausgabe newAusgabe = ausgabeService.insertAusgabe(ausgabe);
+	
+		System.out.println(TAG + ausgabe.getBetrag());
+		System.out.println(TAG + ausgabe.getDebtor().size());
+		EinnahmeAusgabe newAusgabe = ausgabeService.insertEinnahmeAusgabe(ausgabe);
 		String id = String.valueOf(newAusgabe.getId());
 		URI uri = uriInfo.getAbsolutePathBuilder().path(id).build();
 		return Response.created(uri).entity(newAusgabe).build();

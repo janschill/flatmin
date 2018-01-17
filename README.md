@@ -2,6 +2,9 @@
 
 ## Setup
 
+## Deployment
+Right click in Eclipse on your project folder and select Export, then WAR File. 
+
 ### Application server
 We will be using GlassFish.
 

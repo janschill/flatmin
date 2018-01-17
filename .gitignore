@@ -1,6 +1,8 @@
 /flatmin2/build/
 /FlatminClient/build
 
+package-lock.json
+
 ### Android ###
 # Built application files
 *.apk
